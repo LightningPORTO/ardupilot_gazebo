@@ -84,21 +84,9 @@
       </link>
     </model>
 
-    <model name="my_mesh">
-      <pose>100 100 0  0 0 1.5708</pose>
-      <static>true</static>
-      <link name="body">
-        <visual name="visual">
-          <geometry>
-            <mesh><uri>file://eolica_normal_cm.stl</uri></mesh>
-          </geometry>
-        </visual>
-      </link>
-    </model>
-
-    <model name="iris_demo">
+    <model name="vtol_test">
       <include>
-        <uri>model://iris_with_ardupilot</uri>
+        <uri>model://standard_vtol</uri>
       </include>
     </model>
   </world>
