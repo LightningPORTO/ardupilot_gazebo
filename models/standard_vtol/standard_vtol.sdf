@@ -45,7 +45,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -59,7 +59,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -73,7 +73,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -88,7 +88,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -103,7 +103,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -118,7 +118,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -133,7 +133,7 @@
         </geometry>
         <material>
           <script>
-            <name>Gazebo/DarkGrey</name>
+            <name>Gazebo/White</name>
             <uri>__default__</uri>
           </script>
         </material>
@@ -560,9 +560,8 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-
-    <link name='rotor_puller'>
-      <pose>-0.22 0 0.0 0 1.57 0</pose>
+<link name='rotor_puller'>
+      <pose>-0.26 0 0.0 0 -1.57 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>0.005</mass>
@@ -576,7 +575,7 @@
         </inertia>
       </inertial>
       <collision name='rotor_puller_collision'>
-        <pose>0.0 0 -0.04 0 0 0</pose>
+        <pose>0.0 0 0 0 0 0</pose>
         <geometry>
           <cylinder>
             <length>0.005</length>
@@ -593,7 +592,7 @@
         </surface>
       </collision>
       <visual name='rotor_puller_visual'>
-        <pose>0 0 -0.04 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>0.8 0.8 0.8</scale>
@@ -621,13 +620,19 @@
           <upper>1e+16</upper>
         </limit>
         <dynamics>
+	  <damping>0.001</damping>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
-    </joint>
+      <physics>
+        <ode>
+          <implicit_spring_damper>1</implicit_spring_damper>
+        </ode>
+      </physics>
 
+    </joint>
     <link name="left_elevon">
       <inertial>
         <mass>0.00000001</mass>
@@ -1018,9 +1023,9 @@
       <cma_stall>0.0</cma_stall>
       <area>0.02</area>
       <air_density>1.2041</air_density>
-      <cp>0 0 0.074205</cp>
-      <forward>-1 0 0</forward>
-      <upward>0 -1 0</upward>
+      <cp>0.074205 0 0</cp>
+      <forward>0 -1 0</forward>
+      <upward>0 0 -1</upward>
       <link_name>rotor_puller</link_name>
     </plugin>
     <plugin name="rotor_puller_blade_2" filename="libLiftDragPlugin.so">
@@ -1034,9 +1039,9 @@
       <cma_stall>0.0</cma_stall>
       <area>0.02</area>
       <air_density>1.2041</air_density>
-      <cp>0 0 -0.074205</cp>
-      <forward>1 0 0</forward>
-      <upward>0 -1 0</upward>
+      <cp>-0.074205 0 0</cp>
+      <forward>0 1 0</forward>
+      <upward>0 0 -1</upward>
       <link_name>rotor_puller</link_name>
     </plugin> 
 
@@ -1111,37 +1116,42 @@
         <controlVelocitySlowdownSim>20</controlVelocitySlowdownSim>
       </control>
       <control channel="2">
-        <multiplier>5000</multiplier>
+        <multiplier>1000</multiplier>
         <offset>0</offset>
         <type>VELOCITY</type>
-        <cmd_max>1.0</cmd_max>
+        <p_gain>10</p_gain>
+        <i_gain>0</i_gain>
+        <d_gain>0</d_gain>
+        <i_max>0</i_max>
+        <i_min>0</i_min>
+        <cmd_max>20.0</cmd_max>
         <cmd_min>0.0</cmd_min>
         <jointName>rotor_puller_joint</jointName>
       </control>
       <control channel="1">
-        <multiplier>-1</multiplier>
+        <multiplier>1</multiplier>
         <offset>-0.5</offset>
         <type>POSITION</type>
-        <p_gain>10.0</p_gain>
+        <p_gain>2.5</p_gain>
         <i_gain>0</i_gain>
         <d_gain>0</d_gain>
         <i_max>0</i_max>
         <i_min>0</i_min>
-        <cmd_max>2.0</cmd_max>
-        <cmd_min>-2.0</cmd_min>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
         <jointName>left_elevon_joint</jointName>
       </control>
       <control channel="0">
-        <multiplier>-1</multiplier>
+        <multiplier>1</multiplier>
         <offset>-0.5</offset>
         <type>POSITION</type>
-        <p_gain>10.0</p_gain>
+        <p_gain>2.5</p_gain>
         <i_gain>0</i_gain>
         <d_gain>0</d_gain>
         <i_max>0</i_max>
         <i_min>0</i_min>
-        <cmd_max>2.0</cmd_max>
-        <cmd_min>-2.0</cmd_min>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
         <jointName>right_elevon_joint</jointName>
       </control>
       <control channel="3">
@@ -1153,17 +1163,8 @@
         <multiplier>1</multiplier>
         <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
-      <left_elevon_joint>
-        left_elevon_joint
-      </left_elevon_joint>
-      <right_elevon_joint>
-        right_elevon_joint
-      </right_elevon_joint>
-      <elevator_joint>
-        elevator_joint
-      </elevator_joint>
     </plugin>
-    <static>0</static>
+    
   </model>
 </sdf>
 
