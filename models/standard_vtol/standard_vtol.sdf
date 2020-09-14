@@ -560,9 +560,8 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-
-    <link name='rotor_puller'>
-      <pose>-0.22 0 0.0 0 1.57 0</pose>
+<link name='rotor_puller'>
+      <pose>-0.26 0 0.0 0 -1.57 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>0.005</mass>
@@ -576,7 +575,7 @@
         </inertia>
       </inertial>
       <collision name='rotor_puller_collision'>
-        <pose>0.0 0 -0.04 0 0 0</pose>
+        <pose>0.0 0 0 0 0 0</pose>
         <geometry>
           <cylinder>
             <length>0.005</length>
@@ -593,7 +592,7 @@
         </surface>
       </collision>
       <visual name='rotor_puller_visual'>
-        <pose>0 0 -0.04 0 0 0</pose>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>0.8 0.8 0.8</scale>
@@ -1022,9 +1021,9 @@
       <cla_stall>-0.025</cla_stall>
       <cda_stall>0.0</cda_stall>
       <cma_stall>0.0</cma_stall>
-      <area>0.002</area>
+      <area>0.02</area>
       <air_density>1.2041</air_density>
-      <cp>0.084 0 0</cp>
+      <cp>0.074205 0 0</cp>
       <forward>0 -1 0</forward>
       <upward>0 0 -1</upward>
       <link_name>rotor_puller</link_name>
@@ -1038,9 +1037,9 @@
       <cla_stall>-0.025</cla_stall>
       <cda_stall>0.0</cda_stall>
       <cma_stall>0.0</cma_stall>
-      <area>0.002</area>
+      <area>0.02</area>
       <air_density>1.2041</air_density>
-      <cp>-0.084 0 0</cp>
+      <cp>-0.074205 0 0</cp>
       <forward>0 1 0</forward>
       <upward>0 0 -1</upward>
       <link_name>rotor_puller</link_name>
@@ -1071,20 +1070,63 @@
       -->
       <modelXYZToAirplaneXForwardZDown>0 0 0 3.141593 0 0</modelXYZToAirplaneXForwardZDown>
       <gazeboXYZToNED>0 0 0 3.141593 0 0</gazeboXYZToNED>
-      <imuName>standard_vtol/imu_link::imu_sensor</imuName>
+      <imuName>standard_vtol::standard_vtol/imu_link::imu_sensor</imuName>
       <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
-      <control channel="0">
-        <multiplier>1</multiplier>
-        <offset>-0.5</offset>
-        <type>POSITION</type>
-        <p_gain>2.5</p_gain>
+      <control channel="4">
+      <!--
+          incoming control command [0, 1]
+          so offset it by 0 to get [0, 1]
+          and divide max target by 1.
+          offset = 0
+          multiplier = 838 max rpm / 1 = 838
+        -->
+        <type>VELOCITY</type>
+        <offset>0</offset>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
+        <jointName>rotor_0_joint</jointName>
+        <multiplier>1500</multiplier>
+        <controlVelocitySlowdownSim>20</controlVelocitySlowdownSim>
+      </control>
+      <control channel="5">
+        <type>VELOCITY</type>
+        <offset>0</offset>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
+        <jointName>rotor_1_joint</jointName>
+        <multiplier>1500</multiplier>
+        <controlVelocitySlowdownSim>20</controlVelocitySlowdownSim>
+      </control>
+      <control channel="6">
+        <type>VELOCITY</type>
+        <offset>0</offset>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
+        <jointName>rotor_2_joint</jointName>
+        <multiplier>-1500</multiplier>
+        <controlVelocitySlowdownSim>20</controlVelocitySlowdownSim>
+      </control>
+      <control channel="7">
+        <type>VELOCITY</type>
+        <offset>0</offset>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
+        <jointName>rotor_3_joint</jointName>
+        <multiplier>-1500</multiplier>
+        <controlVelocitySlowdownSim>20</controlVelocitySlowdownSim>
+      </control>
+      <control channel="2">
+        <multiplier>1000</multiplier>
+        <offset>0</offset>
+        <type>VELOCITY</type>
+        <p_gain>10</p_gain>
         <i_gain>0</i_gain>
         <d_gain>0</d_gain>
         <i_max>0</i_max>
         <i_min>0</i_min>
-        <cmd_max>1.0</cmd_max>
-        <cmd_min>-1.0</cmd_min>
-        <jointName>left_elevon_joint</jointName>
+        <cmd_max>20.0</cmd_max>
+        <cmd_min>0.0</cmd_min>
+        <jointName>rotor_puller_joint</jointName>
       </control>
       <control channel="1">
         <multiplier>1</multiplier>
@@ -1097,93 +1139,32 @@
         <i_min>0</i_min>
         <cmd_max>1.0</cmd_max>
         <cmd_min>-1.0</cmd_min>
-        <jointName>right_elevon_joint</jointName>
+        <jointName>left_elevon_joint</jointName>
       </control>
-      <control channel="2">
+      <control channel="0">
         <multiplier>1</multiplier>
         <offset>-0.5</offset>
         <type>POSITION</type>
         <p_gain>2.5</p_gain>
         <i_gain>0</i_gain>
-        <d_gain>0.1</d_gain>
-        <i_max>0</i_max>
-        <i_min>0</i_min>
-        <cmd_max>1</cmd_max>
-        <cmd_min>-1</cmd_min>
-        <jointName>elevator_joint</jointName>
-      </control>
-      <control channel="3">
-        <multiplier>1000</multiplier>
-        <offset>0</offset>
-        <type>VELOCITY</type>
-        <p_gain>10</p_gain>
-        <i_gain>0</i_gain>
         <d_gain>0</d_gain>
         <i_max>0</i_max>
         <i_min>0</i_min>
-        <cmd_max>20.0</cmd_max>
-        <cmd_min>0.0</cmd_min>
-        <jointName>rotor_puller_joint</jointName>
-        <rotorVelocitySlowdownSim>1</rotorVelocitySlowdownSim>
+        <cmd_max>1.0</cmd_max>
+        <cmd_min>-1.0</cmd_min>
+        <jointName>right_elevon_joint</jointName>
       </control>
-      <control channel="4">
-        <multiplier>1000</multiplier>
+      <control channel="3">
+        <type>POSITION</type>
         <offset>0</offset>
-        <type>VELOCITY</type>
-        <p_gain>0.2</p_gain>
-        <i_gain>0.2</i_gain>
-        <d_gain>0.0</d_gain>
-        <i_max>0</i_max>
-        <i_min>0</i_min>
         <cmd_max>2.5</cmd_max>
         <cmd_min>-2.5</cmd_min>
-        <jointName>rotor_0_joint</jointName>
-        <rotorVelocitySlowdownSim>1</rotorVelocitySlowdownSim>
+        <jointName>elevator_joint</jointName>
         <multiplier>1</multiplier>
-      </control>
-      <control channel="5">
-        <multiplier>1000</multiplier>
-        <offset>0</offset>
-        <type>VELOCITY</type>
-        <p_gain>0.2</p_gain>
-        <i_gain>0.2</i_gain>
-        <d_gain>0.0</d_gain>
-        <i_max>0</i_max>
-        <i_min>0</i_min>
-        <cmd_max>2.5</cmd_max>
-        <cmd_min>-2.5</cmd_min>
-        <jointName>rotor_1_joint</jointName>
-        <rotorVelocitySlowdownSim>1</rotorVelocitySlowdownSim>
-      </control>
-      <control channel="6">
-        <multiplier>-1000</multiplier>
-        <offset>0</offset>
-        <type>VELOCITY</type>
-        <p_gain>0.2</p_gain>
-        <i_gain>0.2</i_gain>
-        <d_gain>0.0</d_gain>
-        <i_max>0</i_max>
-        <i_min>0</i_min>
-        <cmd_max>2.5</cmd_max>
-        <cmd_min>-2.5</cmd_min>
-        <jointName>rotor_2_joint</jointName>
-        <rotorVelocitySlowdownSim>1</rotorVelocitySlowdownSim>
-      </control>
-      <control channel="7">
-        <multiplier>-1000</multiplier>
-        <offset>0</offset>
-        <type>VELOCITY</type>
-        <p_gain>0.2</p_gain>
-        <i_gain>0.2</i_gain>
-        <d_gain>0.0</d_gain>
-        <i_max>0</i_max>
-        <i_min>0</i_min>
-        <cmd_max>2.5</cmd_max>
-        <cmd_min>-2.5</cmd_min>
-        <jointName>rotor_3_joint</jointName>
-        <rotorVelocitySlowdownSim>1</rotorVelocitySlowdownSim>
+        <controlVelocitySlowdownSim>1</controlVelocitySlowdownSim>
       </control>
     </plugin>
+    
   </model>
 </sdf>
 
